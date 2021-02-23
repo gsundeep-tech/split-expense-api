@@ -102,3 +102,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+# hiding the IDE
+.vscode
+.idea
+
+# hiding the pycache files
+*.pyc

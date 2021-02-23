@@ -1,0 +1,5 @@
+flask
+flask-restplus
+Werkzeug==0.16.1
+sqlalchemy
+psycopg2
