@@ -34,6 +34,8 @@ Backend application uses Postgres as the dependency, follow the steps to install
 
    ![Dbeaver Database connectionn](./documentation/pictures/db_connection.png "Dbeaver Database connection")
 
+   Note: Make sure devdb is already created and check connection via dbeaver
+
 ### Installation of Application library Requirements
 
 Application requirements can be install current system python runtime or we can create a virtual environment. In this local setup we will be using the anaconda environment for our setup
@@ -47,15 +49,20 @@ Application requirements can be install current system python runtime or we can 
 
    `conda activate expense`
 
-4. navigate to split_expense_api and install the requirement.txt libraries using the following command
+4. navigate to split_expense_api folder and install the requirement.txt libraries using the following command
 
-   `pip -r requirements.txt`
+   `pip install -r requirements.txt`
 
 ### Configuring the pycharm
 
 1. Download and install [Pycharm(community edition)](https://www.jetbrains.com/pycharm/download/) application
 2. open the split-expense project in the pycharm
-3. Change the interpreter settings by going to preferences -> project: split-expense -> python interpreter -> click on gear icon and select add interpreter -> select conda environment -> select exisiting environment and choose 'expense' from list.
+3. Change the interpreter settings by going to - preferences
+   - project: split-expense
+   - python interpreter
+   - click on gear icon and select add interpreter
+   - select conda environment
+   - select exisiting environment and choose 'expense' from list.
 
 ### Executing the application
 
@@ -80,23 +87,23 @@ The front project was created with [Create React App](https://reactjs.org/docs/c
 
 1. Clone the repo with below command.
 
-      `git clone https://github.com/gsundeep-tech/split-expense.git`
+   `git clone https://github.com/gsundeep-tech/split-expense.git`
 
 2. Navigate to split_expenses_ui folder
 
-      `cd split_expenses_ui`
+   `cd split_expenses_ui`
 
 3. Install dependencies by running below command.
 
-      `npm install`
+   `npm install`
 
 4. Launch the application using below command.
 
-      `npm run start`
+   `npm run start`
 
 5. To build the application use below command.
 
-      `npm run build`
+   `npm run build`
 
 ### Learn More
 
