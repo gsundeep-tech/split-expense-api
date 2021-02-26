@@ -3,3 +3,5 @@ flask-restplus
 Werkzeug==0.16.1
 sqlalchemy
 psycopg2
+flask_cors
+tabula
