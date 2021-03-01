@@ -1,6 +1,16 @@
+"""
+TODO:
+1. Currently extracting the first table even though we are reading all pages, Supporting of extraction of all pages
+2. Creating a factory method to support the other invoices as well
+3. Better logging functionality
+4. Constants
+"""
+
 import os
 import json
-import tabula
+
+from split_expenses_api.api.utils.parsers.parserInterface import ParserInterface
+from split_expenses_api.api.constants import LazadaRedmartConstants, InvoiceKeywords
 
 
 header_items_map = {
@@ -11,10 +21,12 @@ header_items_map = {
     "Nett Amount Paid": "nett_amount_paid"
 }
 
-class LazadaPdfParser:
-
-    def __init__(self, file_path):
-        self.tables = tabula.read_pdf(file_path, pages='all', multiple_tables=True)
+class LazadaParser(ParserInterface):
+    
+    def __init__(self):
+        super(LazadaParser, self).__init__()
+        self.table_visited = [False] * len(self.tables)
+        self.useful_table = [False] * len(self.tables)
 
     def extract(self):
 
@@ -34,6 +46,7 @@ class LazadaPdfParser:
                 break
             idx += 1
         return idx
+
 
     def __get_redmart_header_item_values(self):
 
@@ -82,15 +95,13 @@ class LazadaPdfParser:
             _row['price'] = float(values[-1])
         return rows_json
 
-
 if __name__ == "__main__":
-
     # _file = 'lazada.pdf'
     # pdf_dir_path = os.path.dirname(__file__) + '/tmp/'
     # file_path = pdf_dir_path + _file
 
     file_path = '/Users/I329382/Documents/Github/Split-Expenses/split_expenses_api/tmp/lazada.pdf'
-    pdf_parser = LazadaPdfParser(file_path)
+    pdf_parser = LazadaParser(file_path)
     header_items_values, line_item_values = pdf_parser.extract()
 
     print(header_items_values)
