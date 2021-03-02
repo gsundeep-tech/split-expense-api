@@ -28,9 +28,10 @@ if __name__ == "__main__":
     for _file in _files:
         file_path = pdf_dir_path + _file
         pdf_parser = ParserFactory(file_path=file_path)
-        header_items_values, line_item_values = pdf_parser.extract()
+        header_items_values, line_item_values, validation_status = pdf_parser.extract()
 
         print('**************************')
         print(header_items_values)
         print(line_item_values)
+        print(validation_status)
         print()

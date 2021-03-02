@@ -19,9 +19,6 @@ class LazadaParser(ParserInterface):
         else:
             raise Exception("Lazada Parser only Supports PDF files")
 
-        self.table_visited = [False] * len(self.tables)
-        self.useful_table = [False] * len(self.tables)
-
         """
         Only total, delivery fee, discount and net amount paid are displayed. 
         Subtotal is not being displayed as there can be different types of subtotal and 
@@ -42,9 +39,36 @@ class LazadaParser(ParserInterface):
         # Extract the line item values
         line_item_values = self.__get_redmart_line_items_values()
 
-        # validate
+        # validating the retrieved headers and line items
+        validation_status = self.validate(header_items_values, line_item_values)
 
-        return header_items_values, line_item_values
+        return header_items_values, line_item_values, validation_status
+
+
+    def validate(self, header_item_values, line_item_values):
+
+        messages = []
+        messages.append(self.__validate_net_amount(header_item_values))
+        messages.append(self.__validate_total(header_item_values, line_item_values))
+        return " ; ".join(messages)
+
+    def __validate_net_amount(self, header_item_values):
+        if header_item_values[InvoiceKeywords.NET_AMOUNT] == header_item_values[InvoiceKeywords.TOTAL] - header_item_values[InvoiceKeywords.DISCOUNT]:
+            return "Net Amount & Total Amount is correct"
+        return "Net Amount is wrong"
+
+    def __validate_total(self, header_item_values, line_item_values):
+        total = header_item_values[InvoiceKeywords.TOTAL]
+        line_item_total = 0
+        for _row in line_item_values:
+            line_item_total += _row['price']
+            line_item_total = float("{:.2f}".format(line_item_total))
+
+        print("Header total : ", total)
+        print("Products sum : ", line_item_total)
+        if total == line_item_total:
+            return "All products sum equal to total"
+        return "All product sum not equal to total value, header total: {}, line_item_total: {}, difference: {:.2f}".format(total, line_item_total, abs(total-line_item_total))
 
     def __get_table_index(self, identification_keyword, stop=True):
         idx = 0

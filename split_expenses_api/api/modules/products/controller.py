@@ -62,7 +62,7 @@ class ProductsInvoiceUpload(Resource):
             tmp_file_path = os.path.join(tmpdir, filename)
             _file.save(tmp_file_path)
             pdf_parser = ParserFactory(tmp_file_path)
-            header_items_values, line_item_values = pdf_parser.extract()
+            header_items_values, line_item_values, validation_status = pdf_parser.extract()
             response = {
                 "header": header_items_values,
                 "line_item": line_item_values
