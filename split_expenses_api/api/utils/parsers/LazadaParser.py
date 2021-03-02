@@ -1,32 +1,38 @@
-"""
-TODO:
-1. Currently extracting the first table even though we are reading all pages, Supporting of extraction of all pages
-2. Creating a factory method to support the other invoices as well
-3. Better logging functionality
-4. Constants
-"""
-
-import os
 import json
+import tabula
+import pandas as pd
 
 from split_expenses_api.api.utils.parsers.parserInterface import ParserInterface
 from split_expenses_api.api.constants import LazadaRedmartConstants, InvoiceKeywords
 
 
-header_items_map = {
-    "Redmart Subtotal": "redmart_subtotal",
-    "Delivery Fee": "delivery_fee",
-    "Total": "total",
-    "**Lazada Discount": "lazada_discount",
-    "Nett Amount Paid": "nett_amount_paid"
-}
+REDMART_HEADER_TABLE_IDENTIFICATION_KEYWORD = "Redmart Subtotal"
+REDMART_LINE_ITEM_TABLE_IDENTIFICATION_KEYWORD = "S/N"
+
 
 class LazadaParser(ParserInterface):
     
-    def __init__(self):
-        super(LazadaParser, self).__init__()
+    def __init__(self, file_path, file_type):
+
+        if file_type == 'pdf':
+            self.tables = tabula.read_pdf(file_path, pages='all', multiple_tables=True)
+        else:
+            raise Exception("Lazada Parser only Supports PDF files")
+
         self.table_visited = [False] * len(self.tables)
         self.useful_table = [False] * len(self.tables)
+
+        """
+        Only total, delivery fee, discount and net amount paid are displayed. 
+        Subtotal is not being displayed as there can be different types of subtotal and 
+        we are only concerned with total
+        """
+        self.redmart_header_keywords_map = {
+            LazadaRedmartConstants.REDMART_DELIVERY_FEE: InvoiceKeywords.DELIVERY_FEE,
+            LazadaRedmartConstants.REDMART_TOTAL: InvoiceKeywords.TOTAL,
+            LazadaRedmartConstants.REDMART_DISCOUNT: InvoiceKeywords.DISCOUNT,
+            LazadaRedmartConstants.REDMART_NET_AMOUNT: InvoiceKeywords.NET_AMOUNT
+        }
 
     def extract(self):
 
@@ -36,35 +42,57 @@ class LazadaParser(ParserInterface):
         # Extract the line item values
         line_item_values = self.__get_redmart_line_items_values()
 
+        # validate
+
         return header_items_values, line_item_values
 
-    def __get_table_index(self, keyword):
+    def __get_table_index(self, identification_keyword, stop=True):
         idx = 0
+        table_indexes = []
         for table in self.tables:
             content = table[0][0]
-            if keyword in content:
-                break
+            if identification_keyword in content:
+                table_indexes.append(idx)
+                if stop:
+                    break
             idx += 1
-        return idx
+        return table_indexes
 
 
     def __get_redmart_header_item_values(self):
+        """
+        returns: json having the header items
+        """
 
-        # Identifying the table which contains the header
-        # items information
-        idx = self.__get_table_index(keyword="Redmart Subtotal")
+        table_indexes = self.__get_table_index(identification_keyword=REDMART_HEADER_TABLE_IDENTIFICATION_KEYWORD)
+        if len(table_indexes) > 0:
+            idx = table_indexes[0]
+        else:
+            return {}
+
         content = self.tables[idx][0][0]
         rows = content.split('\r')
 
         # Extracting the header items
         header_items_json = {}
-        for key in header_items_map.keys():
+        for key in self.redmart_header_keywords_map.keys():
             price = self.__get_header_items_price(rows, key)
             if price == "FREE":
                 price = 0
             if price is None:
                 continue
-            header_items_json[header_items_map[key]] = float(price)
+            header_items_json[self.redmart_header_keywords_map[key]] = float(price)
+
+        # check if discount is returned
+        if InvoiceKeywords.DISCOUNT not in header_items_json:
+            header_items_json[InvoiceKeywords.DISCOUNT] = 0
+        else:
+            header_items_json[InvoiceKeywords.DISCOUNT] = abs(header_items_json[InvoiceKeywords.DISCOUNT])
+
+        # check if net amount is returned
+        # if net amount is not present then assigning total to net amount
+        if InvoiceKeywords.NET_AMOUNT not in header_items_json:
+            header_items_json[InvoiceKeywords.NET_AMOUNT] = header_items_json[InvoiceKeywords.TOTAL]
         return header_items_json
 
     def __get_header_items_price(self, rows, key):
@@ -81,29 +109,26 @@ class LazadaParser(ParserInterface):
             print("Exception while parsing the data")
 
     def __get_redmart_line_items_values(self):
-        idx = self.__get_table_index(keyword="S/N")
-        items_table = self.tables[idx]
-        items_table.columns = items_table.iloc[0]
-        # Removing the first row as it is a header
-        items_table = items_table[1:]
-        # Removing the last row as it contains the value
-        items_table = items_table[:-1]
+        table_indexes = self.__get_table_index(identification_keyword=REDMART_LINE_ITEM_TABLE_IDENTIFICATION_KEYWORD,
+                                               stop=False)
+        if len(table_indexes) == 0:
+            return []
 
-        rows_json = [json.loads(row) for row in items_table.to_json(orient='records', lines=True).splitlines()]
+        complete_items_table = pd.DataFrame(columns=['S/N', 'Description', 'Qty', 'Unit Price', 'Total Price'])
+        for idx in table_indexes:
+            items_table = self.tables[idx]
+            items_table.columns = items_table.iloc[0]
+            # Removing the first row as it is a header
+            items_table = items_table[1:]
+            # Removing the last row as it contains the value
+            items_table = items_table[:-1]
+            complete_items_table = complete_items_table.append(items_table, ignore_index=True)
+
+        rows_json = [json.loads(row) for row in complete_items_table.to_json(orient='records', lines=True).splitlines()]
+        idx = 1
         for _row in rows_json:
             values = _row['Total Price'].split('SGD')
             _row['price'] = float(values[-1])
+            _row['index'] = idx
+            idx += 1
         return rows_json
-
-if __name__ == "__main__":
-    # _file = 'lazada.pdf'
-    # pdf_dir_path = os.path.dirname(__file__) + '/tmp/'
-    # file_path = pdf_dir_path + _file
-
-    file_path = '/Users/I329382/Documents/Github/Split-Expenses/split_expenses_api/tmp/lazada.pdf'
-    pdf_parser = LazadaParser(file_path)
-    header_items_values, line_item_values = pdf_parser.extract()
-
-    print(header_items_values)
-    print(line_item_values)
-
