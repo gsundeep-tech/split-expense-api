@@ -7,7 +7,7 @@ from werkzeug import secure_filename
 
 from split_expenses_api.api.database import db_engine
 from split_expenses_api.api.modules.products.model import ProductsModel
-from split_expenses_api.api.utils.lazada_pdf_parser import LazadaPdfParser
+from split_expenses_api.api.utils.parserFactory import ParserFactory
 
 namespace = Namespace("products", description="API to manage products")
 
@@ -61,8 +61,8 @@ class ProductsInvoiceUpload(Resource):
         with tempfile.TemporaryDirectory() as tmpdir:
             tmp_file_path = os.path.join(tmpdir, filename)
             _file.save(tmp_file_path)
-            pdf_parser = LazadaPdfParser(tmp_file_path)
-            header_items_values, line_item_values = pdf_parser.extract()
+            pdf_parser = ParserFactory(tmp_file_path)
+            header_items_values, line_item_values, validation_status = pdf_parser.extract()
             response = {
                 "header": header_items_values,
                 "line_item": line_item_values

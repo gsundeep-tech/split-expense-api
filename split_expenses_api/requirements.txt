@@ -5,3 +5,4 @@ sqlalchemy
 psycopg2
 flask_cors
 tabula
+pandas
