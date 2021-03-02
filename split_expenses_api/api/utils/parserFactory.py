@@ -21,9 +21,7 @@ if __name__ == "__main__":
     import os
 
     pdf_dir_path = os.path.dirname(__file__) + '/../../tests/resources/lazada_redmart/'
-    # file_name = 'redmart_invoice_two_pages_multi_tables.pdf'
-    # file_path = pdf_dir_path + file_name
-
+   
     _files = os.listdir(pdf_dir_path)
     for _file in _files:
         file_path = pdf_dir_path + _file

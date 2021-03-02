@@ -64,8 +64,6 @@ class LazadaParser(ParserInterface):
             line_item_total += _row['price']
             line_item_total = float("{:.2f}".format(line_item_total))
 
-        print("Header total : ", total)
-        print("Products sum : ", line_item_total)
         if total == line_item_total:
             return "All products sum equal to total"
         return "All product sum not equal to total value, header total: {}, line_item_total: {}, difference: {:.2f}".format(total, line_item_total, abs(total-line_item_total))
