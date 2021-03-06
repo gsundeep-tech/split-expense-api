@@ -68,6 +68,20 @@ Application requirements can be install current system python runtime or we can 
 
 run the application by executing the file server.py
 
+### Executing application via Docker
+
+To Execute the application via Docker, make sure docker is installed in your system.
+
+1. Clone the Repo and navigate to the split_expenses_api/api/database.py file and replace the following code with line 19 (Note: this would be a temporary solution until the config is mapped to the project)
+   ```
+   engine_uri = 'postgres://postgres:password@db:5432/devdb' #__db_uri
+   ```
+2. execute the following command in terminal after navigating to the project root folder
+   ```
+   docker-compose up -d --build
+   ```
+3. open localhost:5000/api to use the backend api
+
 ## Frontend setup
 
 The front project was created with [Create React App](https://reactjs.org/docs/create-a-new-react-app.html). We also added the below additional tools and libraries.

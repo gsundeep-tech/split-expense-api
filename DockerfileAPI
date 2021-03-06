@@ -1,0 +1,18 @@
+FROM python:3.7.10
+
+RUN apt-get update
+
+RUN groupadd expense && useradd -ms /bin/bash -g expense expense
+USER expense
+WORKDIR /home/expense
+
+COPY --chown=expense:expense split_expenses_api ./split_expenses_api
+
+WORKDIR /home/expense/split_expenses_api
+ENV PYTHONPATH "${PYTHONPATH}:/home/expense/"
+
+RUN pip install --user -r requirements.txt
+
+EXPOSE 5000
+
+CMD ["python", "server.py"]
