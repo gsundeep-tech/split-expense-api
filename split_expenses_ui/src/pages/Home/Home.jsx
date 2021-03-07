@@ -1,8 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Home extends Component {
-  state = {};
-  render() {
+function Home() {
     return (
       <main>
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -12,7 +10,6 @@ class Home extends Component {
         </div>
       </main>
     );
-  }
 }
 
 export default Home;
