@@ -1,36 +1,33 @@
 import React, { Component } from "react";
-import { getusers } from "../services/users";
-import Modal from "./shared/modal";
+import Modal from "../../components/shared/modal";
+import { getProducts } from "../../services";
 
-class Users extends Component {
+class Products extends Component {
   state = {
-    users: [],
+    products: [],
     isDisplayDialog: false,
   };
 
   componentDidMount = () => {
-    const fetchUsers = async () => {
-      const users = await getusers();
-      // console.log("users: ", users);
-      this.setState({ users });
+    const fetchProducts = async () => {
+      const products = await getProducts();
+      console.log(products);
+      this.setState({ products });
     };
-    fetchUsers();
+    fetchProducts();
   };
 
-  handleAddUser = () => {
-    console.log("Add user function clicked");
-    this.setState({
-      isDisplayDialog: true,
-    });
+  handleAddProduct = () => {
+    this.setState({ isDisplayDialog: true });
   };
 
   render() {
-    const { users, isDisplayDialog } = this.state;
+    const { products, isDisplayDialog } = this.state;
     return (
       <main>
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <button
-            onClick={this.handleAddUser}
+            onClick={this.handleAddProduct}
             className="hover:bg-light-blue-200 hover:text-light-blue-800 group flex items-center rounded-md bg-light-blue-100 text-light-blue-600 text-sm font-medium px-4 py-2"
           >
             <svg
@@ -59,19 +56,19 @@ class Users extends Component {
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
-                            Name
+                            Product Name
                           </th>
                           <th
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
-                            Email
+                            Quantity
                           </th>
                           <th
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
-                            Mobile Number
+                            Total Price (Previous Total Price)
                           </th>
                           <th scope="col" className="relative px-6 py-3">
                             <span className="sr-only">Edit</span>
@@ -79,27 +76,27 @@ class Users extends Component {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {users &&
-                          users.length > 0 &&
-                          users.map((user) => {
+                        {products &&
+                          products.length > 0 &&
+                          products.map((product) => {
                             // console.log(user);
                             return (
                               <tr>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="flex items-center">
                                     <div className="text-sm font-medium text-gray-900">
-                                      {user.username}
+                                      {product.product_name}
                                     </div>
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="text-sm text-gray-900">
-                                    {user.email}
+                                    {product.quantity}
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="text-sm text-gray-900">
-                                    {user.phone_number}
+                                    {product.price}
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -127,4 +124,4 @@ class Users extends Component {
   }
 }
 
-export default Users;
+export default Products;
