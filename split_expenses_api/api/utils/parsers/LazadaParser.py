@@ -16,6 +16,8 @@ class LazadaParser(ParserInterface):
 
         if file_type == 'pdf':
             self.tables = tabula.read_pdf(file_path, pages='all', multiple_tables=True)
+            if len(self.tables) == 0:
+                return {"error": "tables are not extracted"}
         else:
             raise Exception("Lazada Parser only Supports PDF files")
 
@@ -72,7 +74,7 @@ class LazadaParser(ParserInterface):
         idx = 0
         table_indexes = []
         for table in self.tables:
-            content = table[0][0]
+            content = table.values[0][0]
             if identification_keyword in content:
                 table_indexes.append(idx)
                 if stop:
