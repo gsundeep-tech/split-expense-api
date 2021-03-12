@@ -28,4 +28,4 @@ class ConfigManager:
         return self.__db_uri()
 
     def get_db_pool_size(self):
-        return self.env.get("db_pool_size", 20)
+        return int(self.env.get("db_pool_size", 20))
