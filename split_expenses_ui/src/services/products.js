@@ -56,3 +56,33 @@ export const getProductsFromInvoice = (_file) => {
       });
     });
 };
+
+export const postProducts = (payload) => {
+  const url = config["baseProductsURL"];
+  const { productName, productPrice, productQty } = payload;
+  const form = new FormData();
+  form.append('product_name', productName);
+  form.append('price', productPrice);
+  form.append('quantity', productQty);
+
+  return axios
+    .post(url, form)
+    .then(function (response) {
+      const responseMsg = response.data;
+      Swal.fire({
+        title: "Good job!",
+        text: responseMsg,
+        icon: "success",
+      });
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+      Swal.fire({
+        title: "Error!",
+        text: "Error while posting product data",
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
+    });
+};

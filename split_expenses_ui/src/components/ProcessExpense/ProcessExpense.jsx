@@ -52,6 +52,12 @@ function ProcessExpense(props) {
                           >
                             Price
                           </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            Qty
+                          </th>
                           {users.map((user) => {
                             return (
                               <th
@@ -74,7 +80,7 @@ function ProcessExpense(props) {
                                   <div className="flex items-center">
                                     <div className="text-sm font-medium text-gray-900">
                                       {product.productName}
-                                    </div>
+                                    </div> 
                                   </div>
                                 </td>
                                 <td className="px-6 py-2 whitespace-nowrap">
@@ -84,11 +90,19 @@ function ProcessExpense(props) {
                                       name={product.productName}
                                       id={product.productName}
                                       value={product.price}
+                                      style={{ width: '30%'}}
                                       onChange={(e) =>
                                         handlePriceChange(e, product)
                                       }
                                       className="mt-1 p-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                     />
+                                  </div>
+                                </td>
+                                <td className="px-6 py-2 whitespace-nowrap">
+                                  <div className="flex items-center">
+                                    <div className="text-sm font-medium text-gray-900">
+                                      {product.qty}
+                                    </div>
                                   </div>
                                 </td>
                                 {renderUsersData(product)}

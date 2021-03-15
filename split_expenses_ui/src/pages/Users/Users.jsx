@@ -1,30 +1,55 @@
 import React, { Component } from "react";
-import { getusers } from "../../services";
-import Modal from "../../components/shared/modal";
+import { getUsers, postUsers } from "../../services";
+import { Dialog } from "../../components/shared/Dialog";
 
 class Users extends Component {
   state = {
     users: [],
     isDisplayDialog: false,
+    values: {
+      userName: '',
+      emailId: '',
+      phoneNumber: null,
+    }
+  };
+
+  fetchUsers = async () => {
+    const users = await getUsers();
+    this.setState({ users });
   };
 
   componentDidMount = () => {
-    const fetchUsers = async () => {
-      const users = await getusers();
-      this.setState({ users });
-    };
-    fetchUsers();
+    this.fetchUsers();
   };
 
   handleAddUser = () => {
-    console.log("Add user function clicked");
-    this.setState({
-      isDisplayDialog: true,
-    });
+    const { isDisplayDialog } = this.state;
+    this.setState({ isDisplayDialog: !isDisplayDialog });
   };
 
+  handleSubmit = async () => {
+    const { values } = this.state;
+    await postUsers(values);
+    await this.fetchUsers();
+    this.handleAddUser();
+  }
+
+  handleChange = (e) => {
+    const id = e.target.id;
+    const value = e.target.value;
+    const { values } = this.state;
+    if(id == 'userName') {
+      values.userName = value;
+    } else if(id == 'emailId') {
+      values.emailId = value;
+    } else if(id == 'phoneNumber') {
+      values.phoneNumber = value;
+    }
+    this.setState({ values });
+  }
+
   render() {
-    const { users, isDisplayDialog } = this.state;
+    const { users, isDisplayDialog, values } = this.state;
     return (
       <main>
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -81,7 +106,6 @@ class Users extends Component {
                         {users &&
                           users.length > 0 &&
                           users.map((user) => {
-                            // console.log(user);
                             return (
                               <tr>
                                 <td className="px-6 py-4 whitespace-nowrap">
@@ -120,7 +144,70 @@ class Users extends Component {
             </div>
           </div>
         </div>
-        {isDisplayDialog && <Modal />}
+        {isDisplayDialog && (
+          <Dialog
+            title='Add an user'
+            isDialogOpen={isDisplayDialog}
+            handleCloseDialog={this.handleAddUser}
+            handleSubmit={this.handleSubmit}
+          >
+            <div className="bg-white rounded px-8 pt-6 pb-8 flex flex-col">
+              
+              <div className="-mx-3 md:flex mb-6">
+                <div className="md:w-1/2 px-3 mb-6 md:mb-0">
+                  <label
+                    className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                    for="userName"
+                  >
+                    user name
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"
+                    id="userName"
+                    type="text"
+                    placeholder="eg: Jhon"
+                    value={values.userName}
+                    onChange={this.handleChange}
+                  />
+                </div>
+                <div className="md:w-1/2 px-3">
+                  <label
+                    className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                    for="phoneNumber"
+                  >
+                   phone Number
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+                    id="phoneNumber"
+                    type="text"
+                    placeholder="eg: 1234567890"
+                    value={values.phoneNumber}
+                    onChange={this.handleChange}
+                  />
+                </div>
+              </div>
+              <div className="-mx-3 md:flex mb-6">
+                <div className="md:w-full px-3">
+                  <label
+                    className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                    for="emailId"
+                  >
+                    Email id
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3"
+                    id="emailId"
+                    type="text"
+                    placeholder="eg: abc@gmail.com"
+                    value={values.emailId}
+                    onChange={this.handleChange}
+                  />
+                </div>
+              </div>
+            </div>
+          </Dialog>
+        )}
       </main>
     );
   }
