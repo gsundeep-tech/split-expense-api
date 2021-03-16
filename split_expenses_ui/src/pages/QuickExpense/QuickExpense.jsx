@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Dropzone from "react-dropzone";
 import { ProcessExpense } from "../../components/ProcessExpense";
-import { getProductsFromInvoice, getusers } from "../../services";
+import { getProductsFromInvoice, getUsers } from "../../services";
 
 class QuickExpense extends Component {
   state = {
@@ -12,7 +12,7 @@ class QuickExpense extends Component {
   };
 
   fetchUsers = async () => {
-    const users = await getusers();
+    const users = await getUsers();
     for (let i = 0; i < users.length; i++) {
       users[i]["total"] = 0;
       users[i]["netAmount"] = 0;
@@ -21,7 +21,7 @@ class QuickExpense extends Component {
     this.setState({ users });
   };
 
-  handleFormSubmit = async () => {
+  handleSubmit = async () => {
     const { header, line_item } = await getProductsFromInvoice(this.state.file);
 
     let updatedState = this.state;
@@ -29,6 +29,7 @@ class QuickExpense extends Component {
       let data = {};
       data["productName"] = line_item[i]["Description"];
       data["price"] = line_item[i]["price"];
+      data["qty"] = line_item[i]["Qty"];
       data["id"] = i + 1;
       data["selectedUsers"] = [];
       updatedState.products.push(data);
@@ -37,8 +38,8 @@ class QuickExpense extends Component {
 
     updatedState.header = {
       total: header.total,
-      netAmount: header.nett_amount_paid,
-      discount: Math.abs(header.lazada_discount),
+      netAmount: header.nett_amount,
+      discount: Math.abs(header.discount),
       deliveryFee: header.delivery_fee,
     };
 

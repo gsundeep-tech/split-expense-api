@@ -1,28 +1,55 @@
 import React, { Component } from "react";
-import Modal from "../../components/shared/modal";
-import { getProducts } from "../../services";
+import { Dialog } from "../../components/shared/Dialog";
+import { getProducts, postProducts } from "../../services";
 
 class Products extends Component {
   state = {
     products: [],
     isDisplayDialog: false,
+    values: {
+      productName: '',
+      productPrice: '',
+      productQty: '',
+    }
+  };
+
+  fetchProducts = async () => {
+    const products = await getProducts();
+    this.setState({ products });
   };
 
   componentDidMount = () => {
-    const fetchProducts = async () => {
-      const products = await getProducts();
-      console.log(products);
-      this.setState({ products });
-    };
-    fetchProducts();
+    this.fetchProducts();
   };
 
   handleAddProduct = () => {
-    this.setState({ isDisplayDialog: true });
+    const { isDisplayDialog } = this.state;
+    this.setState({ isDisplayDialog: !isDisplayDialog });
   };
 
+  handleSubmit = async () => {
+    const { values } = this.state;
+    await postProducts(values);
+    await this.fetchProducts();
+    this.handleAddProduct();
+  }
+
+  handleChange = (e) => {
+    const id = e.target.id;
+    const value = e.target.value;
+    const { values } = this.state;
+    if(id == 'productName') {
+      values.productName = value;
+    } else if(id == 'productPrice') {
+      values.productPrice = value;
+    } else if(id == 'productQty') {
+      values.productQty = value;
+    }
+    this.setState({ values });
+  }
+
   render() {
-    const { products, isDisplayDialog } = this.state;
+    const { products, isDisplayDialog, values } = this.state;
     return (
       <main>
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -118,7 +145,69 @@ class Products extends Component {
             </div>
           </div>
         </div>
-        {isDisplayDialog && <Modal />}
+        {isDisplayDialog && (
+          <Dialog
+            title='Add a product'
+            isDialogOpen={isDisplayDialog}
+            handleCloseDialog={this.handleAddProduct}
+            handleSubmit={this.handleSubmit}
+          >
+            <div className="bg-white rounded px-8 pt-6 pb-8 flex flex-col">
+              <div className="-mx-3 md:flex mb-6">
+                <div className="md:w-full px-3">
+                  <label
+                    className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                    for="productName"
+                  >
+                    Product name
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3"
+                    id="productName"
+                    type="text"
+                    placeholder="eg: Apple"
+                    value={values.productName}
+                    onChange={this.handleChange}
+                  />
+                </div>
+              </div>
+              <div className="-mx-3 md:flex mb-6">
+                <div className="md:w-1/2 px-3 mb-6 md:mb-0">
+                  <label
+                    className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                    for="productPrice"
+                  >
+                    product price
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"
+                    id="productPrice"
+                    type="text"
+                    placeholder="eg: 99"
+                    value={values.productPrice}
+                    onChange={this.handleChange}
+                  />
+                </div>
+                <div className="md:w-1/2 px-3">
+                  <label
+                    className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                    for="productQty"
+                  >
+                    product quantity
+                  </label>
+                  <input
+                    className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+                    id="productQty"
+                    type="text"
+                    placeholder="eg: 2"
+                    value={values.productQty}
+                    onChange={this.handleChange}
+                  />
+                </div>
+              </div>
+            </div>
+          </Dialog>
+        )}
       </main>
     );
   }
