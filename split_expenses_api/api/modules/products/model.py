@@ -8,6 +8,7 @@ class ProductsModel:
         self.table_name = "products"
         self.conn = conn
         self.table = Table(self.table_name, metadata,
+                           Column("product_id", Integer, primary_key=True, autoincrement=True),
                            Column("product_name", String(128), nullable=False),
                            Column("price", Float, nullable=False),
                            Column("quantity", Integer))
@@ -19,13 +20,16 @@ class ProductsModel:
         self.table.create(bind=self.conn, checkfirst=True)
 
     def get_product_by_id(self, product_id):
-        stmt = select([self.table]).where(self.table.c.product_name == product_id)
+        stmt = select([self.table]).where(self.table.c.product_id == product_id)
         result = self.conn.execute(stmt).fetchone()
-        return {
-            "product_name": result[0],
-            "price": result[1],
-            "quantity": result[2]
-        }
+        if result:
+            return {
+                "product_id": result[0],
+                "product_name": result[1],
+                "price": result[2],
+                "quantity": result[3]
+            }
+        return {"error": "No product found"}
 
     def get_products(self):
         stmt = select([self.table])
@@ -33,15 +37,16 @@ class ProductsModel:
         response = list()
         for row in result:
             response.append({
-                "product_name": row[0],
-                "price": row[1],
-                "quantity": row[2]
+                "product_id": row[0],
+                "product_name": row[1],
+                "price": row[2],
+                "quantity": row[3]
                 })
         return response
 
-    def insert_product(self, prodcut_id, price, quantity):
+    def insert_product(self, prodcut_name, price, quantity):
         record = {
-            "product_name": prodcut_id,
+            "product_name": prodcut_name,
             "price": price,
             "quantity": quantity
         }
@@ -50,6 +55,6 @@ class ProductsModel:
         return result
 
     def delete_product(self, product_id):
-        stmt = self.table.delete(self.table.c.product_name == product_id)
+        stmt = self.table.delete(self.table.c.product_id == product_id)
         result = self.conn.execute(stmt).rowcount
         return result

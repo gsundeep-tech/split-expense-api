@@ -34,7 +34,7 @@ class ProductsController(Resource):
             products_model = ProductsModel(conn)
             result = products_model.insert_product(args.get('product_name'), args.get('price'), args.get('quantity'))
             if result > 0:
-                return "product: {} saved successfully".format(args.get('product_name')), 200
+                return "product {} saved successfully".format(args.get('product_name')), 200
 
 @namespace.route("/<string:product_id>")
 class ProductController(Resource):
@@ -49,7 +49,7 @@ class ProductController(Resource):
             products_model = ProductsModel(conn)
             result = products_model.delete_product(product_id)
             if result > 0:
-                return "product: {} deleted".format(product_id), 200
+                return "product id {} deleted".format(product_id), 200
             return "no product found", 404
 
 @namespace.route("/upload")

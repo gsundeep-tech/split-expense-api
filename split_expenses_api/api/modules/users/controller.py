@@ -26,7 +26,7 @@ class UsersListController(Resource):
         with db_engine.begin() as conn:
             user_model = UserModel(conn)
             user_model.insert_user(username, phone_number, email)
-            return "User: {} Saved successfully".format(username), 201
+            return "User {} Saved successfully".format(username), 201
 
 
 @namespace.route("/<string:user_id>")
@@ -42,5 +42,5 @@ class UserController(Resource):
             user_model = UserModel(conn)
             row_count = user_model.delete_user(user_id)
             if row_count > 0:
-                return "deleted {} record with username: {}".format(row_count, user_id), 200
+                return "deleted user with id {}".format(user_id), 200
             return "User not found", 404
