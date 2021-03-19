@@ -7,9 +7,9 @@ class Products extends Component {
     products: [],
     isDisplayDialog: false,
     values: {
-      productName: '',
-      productPrice: '',
-      productQty: '',
+      product_name: '',
+      product_price: '',
+      product_qty: '',
     }
   };
 
@@ -38,12 +38,12 @@ class Products extends Component {
     const id = e.target.id;
     const value = e.target.value;
     const { values } = this.state;
-    if(id == 'productName') {
-      values.productName = value;
-    } else if(id == 'productPrice') {
-      values.productPrice = value;
-    } else if(id == 'productQty') {
-      values.productQty = value;
+    if(id == 'product_name') {
+      values.product_name = value;
+    } else if(id == 'product_price') {
+      values.product_price = value;
+    } else if(id == 'product_qty') {
+      values.product_qty = value;
     }
     this.setState({ values });
   }
@@ -157,16 +157,16 @@ class Products extends Component {
                 <div className="md:w-full px-3">
                   <label
                     className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                    for="productName"
+                    for="product_name"
                   >
                     Product name
                   </label>
                   <input
                     className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3"
-                    id="productName"
+                    id="product_name"
                     type="text"
                     placeholder="eg: Apple"
-                    value={values.productName}
+                    value={values.product_name}
                     onChange={this.handleChange}
                   />
                 </div>
@@ -175,32 +175,32 @@ class Products extends Component {
                 <div className="md:w-1/2 px-3 mb-6 md:mb-0">
                   <label
                     className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                    for="productPrice"
+                    for="product_price"
                   >
                     product price
                   </label>
                   <input
                     className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"
-                    id="productPrice"
+                    id="product_price"
                     type="text"
                     placeholder="eg: 99"
-                    value={values.productPrice}
+                    value={values.product_price}
                     onChange={this.handleChange}
                   />
                 </div>
                 <div className="md:w-1/2 px-3">
                   <label
                     className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                    for="productQty"
+                    for="product_qty"
                   >
                     product quantity
                   </label>
                   <input
                     className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
-                    id="productQty"
+                    id="product_qty"
                     type="text"
                     placeholder="eg: 2"
-                    value={values.productQty}
+                    value={values.product_qty}
                     onChange={this.handleChange}
                   />
                 </div>

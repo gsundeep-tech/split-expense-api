@@ -28,11 +28,11 @@ export const getUsers = () => {
 
 export const postUsers = (payload) => {
   const url = config["baseUsersURL"];
-  const { userName, emailId, phoneNumber } = payload;
+  const { user_name, email_id, phone_number } = payload;
   const form = new FormData();
-  form.append('username', userName);
-  form.append('email', emailId);
-  form.append('phone_number', phoneNumber);
+  form.append('user_name', user_name);
+  form.append('email', email_id);
+  form.append('phone_number', phone_number);
   
   return axios
     .post(url, form)

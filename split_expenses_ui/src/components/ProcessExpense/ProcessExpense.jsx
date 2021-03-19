@@ -13,8 +13,8 @@ function ProcessExpense(props) {
               <div className="text-sm text-gray-900">
                 <div className="flex items-center h-5">
                   <input
-                    id={user.username}
-                    name={user.username}
+                    id={user.user_name}
+                    name={user.user_name}
                     type="checkbox"
                     onChange={() => handleCheckBox(product, user)}
                     className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
@@ -49,6 +49,7 @@ function ProcessExpense(props) {
                           <th
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            style={{width: '15%'}}
                           >
                             Price
                           </th>
@@ -64,7 +65,7 @@ function ProcessExpense(props) {
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                               >
-                                {user.username}
+                                {user.user_name}
                               </th>
                             );
                           })}
@@ -79,7 +80,7 @@ function ProcessExpense(props) {
                                 <td className="px-6 py-2 whitespace-nowrap">
                                   <div className="flex items-center">
                                     <div className="text-sm font-medium text-gray-900">
-                                      {product.productName}
+                                      {product.product_name}
                                     </div> 
                                   </div>
                                 </td>
@@ -87,14 +88,14 @@ function ProcessExpense(props) {
                                   <div className="text-sm text-gray-900">
                                     <input
                                       type="text"
-                                      name={product.productName}
-                                      id={product.productName}
+                                      name={product.product_name}
+                                      id={product.product_name}
                                       value={product.price}
-                                      style={{ width: '30%'}}
+                                      style={{ width: '50%'}}
                                       onChange={(e) =>
                                         handlePriceChange(e, product)
                                       }
-                                      className="mt-1 p-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                      className="border border-black mt-1 p-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                     />
                                   </div>
                                 </td>
