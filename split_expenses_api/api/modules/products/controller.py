@@ -65,6 +65,6 @@ class ProductsInvoiceUpload(Resource):
             header_items_values, line_item_values, validation_status = pdf_parser.extract()
             response = {
                 "header": header_items_values,
-                "line_item": line_item_values
+                "products": line_item_values
             }
             return response, 200

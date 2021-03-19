@@ -153,6 +153,15 @@ class LazadaParser(ParserInterface):
         for _row in rows_json:
             values = _row['Total Price'].split('SGD')
             _row['price'] = float(values[-1])
-            _row['index'] = idx
+            _row['id'] = idx
+            _row['description'] = _row['Description']
+            _row['quantity'] = _row['Qty']
+            _row['totalPrice'] = _row['Total Price']
+            _row['unitPrice'] = _row['Unit Price']
+            del _row['Description']
+            del _row['Qty']
+            del _row['Total Price']
+            del _row['Unit Price']
+            del _row['S/N']
             idx += 1
         return rows_json
