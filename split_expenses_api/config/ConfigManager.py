@@ -29,3 +29,6 @@ class ConfigManager:
 
     def get_db_pool_size(self):
         return int(self.env.get("db_pool_size", 20))
+
+    def get_db_schema(self):
+        return self.env.get("db_schema", 'expense')
