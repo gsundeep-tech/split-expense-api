@@ -33,7 +33,6 @@ def test_client(request):
     try:
         with engine.begin():
             engine.execute(DropSchema('test_expense', cascade=True))
-            del os.environ['db_schema']
     except Exception as ex:
         print("Test Schema Deleted")
 

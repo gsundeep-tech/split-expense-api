@@ -29,8 +29,9 @@ def create_db():
 
     from sqlalchemy import DDL
     from sqlalchemy import event
-    from split_expenses_api.api.database import Base, db_engine, default_schema
+    from split_expenses_api.api.database import Base, db_engine, get_default_schema
 
+    default_schema = get_default_schema()
     event.listen(Base.metadata, 'before_create',
                  DDL("CREATE SCHEMA IF NOT EXISTS {}".format(default_schema)),
                  once=True)
