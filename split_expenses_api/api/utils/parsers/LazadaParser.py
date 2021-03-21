@@ -154,7 +154,7 @@ class LazadaParser(ParserInterface):
             values = _row['Total Price'].split('SGD')
             _row['price'] = float(values[-1])
             _row['id'] = idx
-            _row['description'] = _row['Description']
+            _row['product_name'] = _row['Description']
             _row['quantity'] = _row['Qty']
             _row['totalPrice'] = _row['Total Price']
             _row['unitPrice'] = _row['Unit Price']
