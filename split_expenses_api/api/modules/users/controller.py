@@ -5,9 +5,14 @@ from split_expenses_api.api.modules.users.model import UserModel
 namespace = Namespace("users", description="API to manage users")
 
 user_parser = namespace.parser()
-user_parser.add_argument("user_name", type=str, required=True, location='form', help='User name')
-user_parser.add_argument("phone_number", type=str, required=False, location='form', help="Enter the phone number with country code")
-user_parser.add_argument("email", type=str, required=False, location='form', help='Enter the email address')
+user_parser.add_argument("user_name", type=str, required=True, location='form',
+                         help='User name')
+user_parser.add_argument("phone_number", type=str, required=False,
+                         location='form',
+                         help="Enter the phone number with country code")
+user_parser.add_argument("email", type=str, required=False, location='form',
+                         help='Enter the email address')
+
 
 @namespace.route("")
 class UsersListController(Resource):

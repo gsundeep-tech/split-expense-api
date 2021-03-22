@@ -1,6 +1,7 @@
 import pytest
 
-pytest.mark.usefixtures('test_client')
+
+@pytest.mark.usefixtures('test_client')
 class TestProductsEndPoint:
 
     def test_1_get_all_products(self, test_client):

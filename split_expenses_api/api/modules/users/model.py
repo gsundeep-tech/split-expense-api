@@ -2,13 +2,15 @@ from sqlalchemy import Table, Column, String, Integer
 from sqlalchemy import select
 from split_expenses_api.api.database import get_metadata
 
+
 class UserModel:
     def __init__(self, conn, additional_cols: list = []):
         metadata = get_metadata()
         self.conn = conn
         self.table_name = "users"
         self.table = Table(self.table_name, metadata,
-                           Column("user_id", Integer, primary_key=True, autoincrement=True),
+                           Column("user_id", Integer, primary_key=True,
+                                  autoincrement=True),
                            Column("user_name", String(64), nullable=False),
                            Column("phone_number", String(13)),
                            Column("email", String(64))
@@ -35,7 +37,10 @@ class UserModel:
         results = self.conn.execute(stmt).fetchall()
         response = list()
         for row in results:
-            response.append({"user_id": row[0], "user_name": row[1], "phone_number": row[2], "email": row[3]})
+            response.append({"user_id": row[0],
+                             "user_name": row[1],
+                             "phone_number": row[2],
+                             "email": row[3]})
         return response
 
     def insert_user(self, username, phone_number, email):
