@@ -26,8 +26,8 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Running pytest
+        run: export PATH="$HOME/split-expense/split_expense_api:$PATH" && cd split_expense_api && pip install -r test-requirements.txt && pytest test
         
       - name: Run a one-line script
         run: echo Hello, world!
