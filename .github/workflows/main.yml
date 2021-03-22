@@ -27,7 +27,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Running pytest
-        run: export PATH="$HOME/split-expense/split_expense_api:$PATH" && cd split_expense_api && pip install -r test-requirements.txt && pytest test
+        run: export PATH="$GITHUB_WORKSPACE/split_expense_api:$PATH" && cd $GITHUB_WORKSPACE/split_expense_api && pip install -r test-requirements.txt && pytest test
         
       - name: Run a one-line script
         run: echo Hello, world!
