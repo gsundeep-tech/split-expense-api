@@ -28,9 +28,12 @@ jobs:
       - name: Echo GITHUB_WORSPACE
         run: echo $GITHUB_WORKSPACE
         
+      - name: Export PATH
+        run: export PATH="$GITHUB_WORKSPACE/split_expenses_api:$PATH"
+        
       # Runs a single command using the runners shell
       - name: Running pytest
-        run: export PATH="$GITHUB_WORKSPACE/split_expense_api:$PATH" && cd $GITHUB_WORKSPACE/split_expense_api && pip install -r test-requirements.txt && pytest test
+        run: cd $GITHUB_WORKSPACE/split_expenses_api && pip install -r test-requirements.txt && pytest tests
         
       - name: Run a one-line script
         run: echo Hello, world!
