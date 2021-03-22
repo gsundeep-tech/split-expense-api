@@ -24,7 +24,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
+      
+      - name: Echo GITHUB_WORSPACE
+        run: echo $GITHUB_WORKSPACE
+        
       # Runs a single command using the runners shell
       - name: Running pytest
         run: export PATH="$GITHUB_WORKSPACE/split_expense_api:$PATH" && cd $GITHUB_WORKSPACE/split_expense_api && pip install -r test-requirements.txt && pytest test
