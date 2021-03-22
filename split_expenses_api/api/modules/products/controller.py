@@ -12,12 +12,19 @@ from split_expenses_api.api.utils.parserFactory import ParserFactory
 namespace = Namespace("products", description="API to manage products")
 
 product_parser = namespace.parser()
-product_parser.add_argument("product_name", str, required=True, location='form', help='Product name')
-product_parser.add_argument("price", float, required=False, location='form', help='product price')
-product_parser.add_argument("quantity", float, required=False, location='form', help='product quantity')
+product_parser.add_argument("product_name", str, required=True,
+                            location='form',
+                            help='Product name')
+product_parser.add_argument("price", float, required=False, location='form',
+                            help='product price')
+product_parser.add_argument("quantity", float, required=False, location='form',
+                            help='product quantity')
 
 invoice_parser = namespace.parser()
-invoice_parser.add_argument('file', type=FileStorage, required=True, location='files', help='Lazada pdf invoice')
+invoice_parser.add_argument('file', type=FileStorage, required=True,
+                            location='files',
+                            help='Lazada pdf invoice')
+
 
 @namespace.route("")
 class ProductsController(Resource):
@@ -32,9 +39,14 @@ class ProductsController(Resource):
         args = product_parser.parse_args()
         with db_engine.begin() as conn:
             products_model = ProductsModel(conn)
-            result = products_model.insert_product(args.get('product_name'), args.get('price'), args.get('quantity'))
+            result = products_model.insert_product(args.get('product_name'),
+                                                   args.get('price'),
+                                                   args.get('quantity'))
             if result > 0:
-                return "product {} saved successfully".format(args.get('product_name')), 201
+                message = "product {} saved successfully".format(
+                    args.get('product_name'))
+                return message, 201
+
 
 @namespace.route("/<string:product_id>")
 class ProductController(Resource):
@@ -52,6 +64,7 @@ class ProductController(Resource):
                 return "product id {} deleted".format(product_id), 200
             return "no product found", 404
 
+
 @namespace.route("/upload")
 class ProductsInvoiceUpload(Resource):
     @namespace.expect(invoice_parser, validate=False)
@@ -62,7 +75,8 @@ class ProductsInvoiceUpload(Resource):
             tmp_file_path = os.path.join(tmpdir, filename)
             _file.save(tmp_file_path)
             pdf_parser = ParserFactory(tmp_file_path)
-            header_items_values, line_item_values, validation_status = pdf_parser.extract()
+            header_items_values, line_item_values, \
+                validation_status = pdf_parser.extract()
             response = {
                 "header": header_items_values,
                 "products": line_item_values

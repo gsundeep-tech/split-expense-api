@@ -33,6 +33,5 @@ def test_client(request):
     try:
         with engine.begin():
             engine.execute(DropSchema('test_expense', cascade=True))
-    except Exception as ex:
+    except Exception:
         print("Test Schema Deleted")
-

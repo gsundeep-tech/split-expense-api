@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.usefixtures('test_client')
 class TestUsersEndpoint:
 
