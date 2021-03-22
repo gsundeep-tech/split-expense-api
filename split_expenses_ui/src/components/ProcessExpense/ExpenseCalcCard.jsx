@@ -65,7 +65,7 @@ function ExpenseCalcCard(props) {
                           >
                             <div className="flex items-center">
                               <div className="text-sm font-medium text-gray-900">
-                                {user.username} total
+                                {user.user_name} total
                               </div>
                             </div>
                           </td>

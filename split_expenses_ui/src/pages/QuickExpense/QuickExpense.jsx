@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Dropzone from "react-dropzone";
 import { ProcessExpense } from "../../components/ProcessExpense";
+import { Spinner } from "../../components/Spinner";
 import { getProductsFromInvoice, getUsers } from "../../services";
 
 class QuickExpense extends Component {
@@ -9,6 +10,13 @@ class QuickExpense extends Component {
     products: [],
     file: null,
     header: {},
+    isLoading: false,
+    isSubmitClicked: false
+  };
+
+  setIsLoading = () => {
+    const { isLoading } = this.state;
+    this.setState({ isLoading: !isLoading, isSubmitClicked: true });
   };
 
   fetchUsers = async () => {
@@ -22,15 +30,16 @@ class QuickExpense extends Component {
   };
 
   handleSubmit = async () => {
-    const { header, line_item } = await getProductsFromInvoice(this.state.file);
+    this.setIsLoading();
+    const { header, products } = await getProductsFromInvoice(this.state.file);
 
     let updatedState = this.state;
-    for (let i = 0; i < line_item.length; i++) {
+    for (let i = 0; i < products.length; i++) {
       let data = {};
-      data["productName"] = line_item[i]["Description"];
-      data["price"] = line_item[i]["price"];
-      data["qty"] = line_item[i]["Qty"];
-      data["id"] = i + 1;
+      data["product_name"] = products[i]["product_name"];
+      data["price"] = products[i]["price"];
+      data["qty"] = products[i]["quantity"];
+      data["id"] = products[i]["id"];
       data["selectedUsers"] = [];
       updatedState.products.push(data);
     }
@@ -38,12 +47,13 @@ class QuickExpense extends Component {
 
     updatedState.header = {
       total: header.total,
-      netAmount: header.nett_amount,
+      netAmount: header.net_amount,
       discount: Math.abs(header.discount),
       deliveryFee: header.delivery_fee,
     };
 
     this.setState({ updatedState });
+    this.setIsLoading();
   };
 
   componentDidMount = () => {
@@ -206,7 +216,12 @@ class QuickExpense extends Component {
   };
 
   render() {
-    const { file, header, products, users } = this.state;
+    const { file, header, isLoading, isSubmitClicked, products, users } = this.state;
+
+    if(isLoading) {
+      return <Spinner />
+    }
+
     return (
       <main>
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -267,6 +282,7 @@ class QuickExpense extends Component {
                           <button
                             id="submit"
                             onClick={this.handleSubmit}
+                            disabled={isSubmitClicked}
                             className="rounded-sm px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none"
                           >
                             Submit
@@ -293,13 +309,13 @@ class QuickExpense extends Component {
               </div>
             </section>
           </div>
-          <ProcessExpense
+           {(!isLoading && products.length > 0 && users.length > 0) ?<ProcessExpense
             header={header}
             products={products}
             users={users}
             handlePriceChange={this.handlePriceChange}
             handleCheckBox={this.handleCheckBox}
-          />
+          /> : (isSubmitClicked && <Spinner />)}
         </div>
       </main>
     );

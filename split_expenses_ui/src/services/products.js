@@ -59,11 +59,11 @@ export const getProductsFromInvoice = (_file) => {
 
 export const postProducts = (payload) => {
   const url = config["baseProductsURL"];
-  const { productName, productPrice, productQty } = payload;
+  const { product_name, product_price, product_qty } = payload;
   const form = new FormData();
-  form.append('product_name', productName);
-  form.append('price', productPrice);
-  form.append('quantity', productQty);
+  form.append('product_name', product_name);
+  form.append('price', product_price);
+  form.append('quantity', product_qty);
 
   return axios
     .post(url, form)

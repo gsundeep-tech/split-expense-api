@@ -7,9 +7,9 @@ class Users extends Component {
     users: [],
     isDisplayDialog: false,
     values: {
-      userName: '',
-      emailId: '',
-      phoneNumber: null,
+      user_name: '',
+      email_id: '',
+      phone_number: null,
     }
   };
 
@@ -38,12 +38,12 @@ class Users extends Component {
     const id = e.target.id;
     const value = e.target.value;
     const { values } = this.state;
-    if(id == 'userName') {
-      values.userName = value;
-    } else if(id == 'emailId') {
-      values.emailId = value;
-    } else if(id == 'phoneNumber') {
-      values.phoneNumber = value;
+    if(id == 'user_name') {
+      values.user_name = value;
+    } else if(id == 'email_id') {
+      values.email_id = value;
+    } else if(id == 'phone_number') {
+      values.phone_number = value;
     }
     this.setState({ values });
   }
@@ -111,7 +111,7 @@ class Users extends Component {
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="flex items-center">
                                     <div className="text-sm font-medium text-gray-900">
-                                      {user.username}
+                                      {user.user_name}
                                     </div>
                                   </div>
                                 </td>
@@ -157,32 +157,32 @@ class Users extends Component {
                 <div className="md:w-1/2 px-3 mb-6 md:mb-0">
                   <label
                     className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                    for="userName"
+                    for="user_name"
                   >
                     user name
                   </label>
                   <input
                     className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"
-                    id="userName"
+                    id="user_name"
                     type="text"
                     placeholder="eg: Jhon"
-                    value={values.userName}
+                    value={values.user_name}
                     onChange={this.handleChange}
                   />
                 </div>
                 <div className="md:w-1/2 px-3">
                   <label
                     className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                    for="phoneNumber"
+                    for="phone_number"
                   >
                    phone Number
                   </label>
                   <input
                     className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
-                    id="phoneNumber"
+                    id="phone_number"
                     type="text"
                     placeholder="eg: 1234567890"
-                    value={values.phoneNumber}
+                    value={values.phone_number}
                     onChange={this.handleChange}
                   />
                 </div>
@@ -191,16 +191,16 @@ class Users extends Component {
                 <div className="md:w-full px-3">
                   <label
                     className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                    for="emailId"
+                    for="email_id"
                   >
                     Email id
                   </label>
                   <input
                     className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3"
-                    id="emailId"
+                    id="email_id"
                     type="text"
                     placeholder="eg: abc@gmail.com"
-                    value={values.emailId}
+                    value={values.email_id}
                     onChange={this.handleChange}
                   />
                 </div>
