@@ -42,10 +42,16 @@ jobs:
       - name: Export PATH
         run: export PATH="$GITHUB_WORKSPACE/split_expenses_api:$PATH"
         
-      - name: Running pytest
+      - name: Backend unit tests checks
         run: cd $GITHUB_WORKSPACE/split_expenses_api && pip install -r test-requirements.txt && pytest tests
         env:
           DB_HOST: postgres
           
-      - name: Flake8 checks
+      - name: Backend linting checks 
         run: pip install flake8==3.9 && flake8 $GITHUB_WORKSPACE/split_expenses_api
+
+      - name: Frontend unit tests checks
+        run: cd $GITHUB_WORKSPACE/split_expenses_ui && npm i && npm run test
+
+      - name: Frontend linting checks
+        run: cd $GITHUB_WORKSPACE/split_expenses_ui && npm run lint
