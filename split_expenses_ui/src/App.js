@@ -1,12 +1,12 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import NavBar from "./components/shared/NavBar";
-import BodyHeader from "./components/shared/BodyHeader";
-import Home from "./pages/Home";
-import Users from "./pages/Users";
-import Products from "./pages/Products";
-import QuickExpense from "./pages/QuickExpense";
+import NavBar from './components/shared/NavBar';
+import BodyHeader from './components/shared/BodyHeader';
+import Home from './pages/Home';
+import Users from './pages/Users';
+import Products from './pages/Products';
+import QuickExpense from './pages/QuickExpense';
 
 function App() {
   return (

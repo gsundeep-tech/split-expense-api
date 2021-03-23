@@ -1,19 +1,16 @@
-import React from "react";
+import React from 'react';
 
 export default function Dialog(props) {
   const { title, handleCloseDialog, handleSubmit, children } = props;
   return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
+    <div className="fixed inset-0 z-50 overflow-auto bg-smoke-light flex" data-testid="dialog-container">
       <div className="fixed z-10 inset-0 overflow-y-auto">
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <div className="fixed inset-0 transition-opacity" aria-hidden="true">
             <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
           </div>
 
-          <span
-            className="hidden sm:inline-block sm:align-middle sm:h-screen"
-            aria-hidden="true"
-          >
+          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
             &#8203;
           </span>
 

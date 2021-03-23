@@ -1,21 +1,23 @@
-import React, { Component } from "react";
-import { Dialog } from "../../components/shared/Dialog";
-import { getProducts, postProducts } from "../../services";
+import React, { Component } from 'react';
+import { Dialog } from '../../components/shared/Dialog';
+import { Spinner } from '../../components/Spinner';
+import { getProducts, postProducts } from '../../services';
 
 class Products extends Component {
   state = {
     products: [],
     isDisplayDialog: false,
+    isLoading: true,
     values: {
       product_name: '',
       product_price: '',
       product_qty: '',
-    }
+    },
   };
 
   fetchProducts = async () => {
     const products = await getProducts();
-    this.setState({ products });
+    this.setState({ products, isLoading: false });
   };
 
   componentDidMount = () => {
@@ -32,26 +34,26 @@ class Products extends Component {
     await postProducts(values);
     await this.fetchProducts();
     this.handleAddProduct();
-  }
+  };
 
-  handleChange = (e) => {
+  handleChange = e => {
     const id = e.target.id;
     const value = e.target.value;
     const { values } = this.state;
-    if(id == 'product_name') {
+    if (id === 'product_name') {
       values.product_name = value;
-    } else if(id == 'product_price') {
+    } else if (id === 'product_price') {
       values.product_price = value;
-    } else if(id == 'product_qty') {
+    } else if (id === 'product_qty') {
       values.product_qty = value;
     }
     this.setState({ values });
-  }
+  };
 
   render() {
-    const { products, isDisplayDialog, values } = this.state;
+    const { products, isDisplayDialog, isLoading, values } = this.state;
     return (
-      <main>
+      <main data-testid="products-page">
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <button
             onClick={this.handleAddProduct}
@@ -103,40 +105,34 @@ class Products extends Component {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {products &&
+                        {!isLoading ? (
+                          products &&
                           products.length > 0 &&
-                          products.map((product) => {
-                            // console.log(user);
+                          products.map(product => {
                             return (
                               <tr>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="flex items-center">
-                                    <div className="text-sm font-medium text-gray-900">
-                                      {product.product_name}
-                                    </div>
+                                    <div className="text-sm font-medium text-gray-900">{product.product_name}</div>
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {product.quantity}
-                                  </div>
+                                  <div className="text-sm text-gray-900">{product.quantity}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {product.price}
-                                  </div>
+                                  <div className="text-sm text-gray-900">{product.price}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                  <a
-                                    href="#"
-                                    className="text-indigo-600 hover:text-indigo-900"
-                                  >
+                                  <a href="#" className="text-indigo-600 hover:text-indigo-900">
                                     Edit
                                   </a>
                                 </td>
                               </tr>
                             );
-                          })}
+                          })
+                        ) : (
+                          <Spinner />
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -147,7 +143,7 @@ class Products extends Component {
         </div>
         {isDisplayDialog && (
           <Dialog
-            title='Add a product'
+            title="Add a product"
             isDialogOpen={isDisplayDialog}
             handleCloseDialog={this.handleAddProduct}
             handleSubmit={this.handleSubmit}

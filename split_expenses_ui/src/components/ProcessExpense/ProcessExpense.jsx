@@ -1,13 +1,13 @@
-import React from "react";
-import ExpenseCalcCard from "./ExpenseCalcCard";
+import React from 'react';
+import ExpenseCalcCard from './ExpenseCalcCard';
 
 function ProcessExpense(props) {
   const { users, products, header, handlePriceChange, handleCheckBox } = props;
 
-  const renderUsersData = (product) => {
+  const renderUsersData = product => {
     return (
       <>
-        {users.map((user) => {
+        {users.map(user => {
           return (
             <td className="px-6 py-4 whitespace-nowrap">
               <div className="text-sm text-gray-900">
@@ -29,7 +29,7 @@ function ProcessExpense(props) {
   };
 
   return (
-    <>
+    <div data-testid="process-expense">
       {products.length > 0 && users.length > 0 && (
         <>
           <div className="px-4 pt-6 sm:px-0">
@@ -49,7 +49,7 @@ function ProcessExpense(props) {
                           <th
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            style={{width: '15%'}}
+                            style={{ width: '15%' }}
                           >
                             Price
                           </th>
@@ -59,7 +59,7 @@ function ProcessExpense(props) {
                           >
                             Qty
                           </th>
-                          {users.map((user) => {
+                          {users.map(user => {
                             return (
                               <th
                                 scope="col"
@@ -74,14 +74,12 @@ function ProcessExpense(props) {
                       <tbody className="bg-white divide-y divide-gray-200">
                         {products &&
                           products.length > 0 &&
-                          products.map((product) => {
+                          products.map(product => {
                             return (
                               <tr>
                                 <td className="px-6 py-2 whitespace-nowrap">
                                   <div className="flex items-center">
-                                    <div className="text-sm font-medium text-gray-900">
-                                      {product.product_name}
-                                    </div> 
+                                    <div className="text-sm font-medium text-gray-900">{product.product_name}</div>
                                   </div>
                                 </td>
                                 <td className="px-6 py-2 whitespace-nowrap">
@@ -91,19 +89,15 @@ function ProcessExpense(props) {
                                       name={product.product_name}
                                       id={product.product_name}
                                       value={product.price}
-                                      style={{ width: '50%'}}
-                                      onChange={(e) =>
-                                        handlePriceChange(e, product)
-                                      }
+                                      style={{ width: '50%' }}
+                                      onChange={e => handlePriceChange(e, product)}
                                       className="border border-black mt-1 p-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                     />
                                   </div>
                                 </td>
                                 <td className="px-6 py-2 whitespace-nowrap">
                                   <div className="flex items-center">
-                                    <div className="text-sm font-medium text-gray-900">
-                                      {product.qty}
-                                    </div>
+                                    <div className="text-sm font-medium text-gray-900">{product.qty}</div>
                                   </div>
                                 </td>
                                 {renderUsersData(product)}
@@ -120,7 +114,7 @@ function ProcessExpense(props) {
           <ExpenseCalcCard header={header} users={users} />
         </>
       )}
-    </>
+    </div>
   );
 }
 
