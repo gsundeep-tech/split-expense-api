@@ -1,21 +1,23 @@
-import React, { Component } from "react";
-import { getUsers, postUsers } from "../../services";
-import { Dialog } from "../../components/shared/Dialog";
+import React, { Component } from 'react';
+import { getUsers, postUsers } from '../../services';
+import { Dialog } from '../../components/shared/Dialog';
+import { Spinner } from '../../components/Spinner';
 
 class Users extends Component {
   state = {
     users: [],
     isDisplayDialog: false,
+    isLoading: true,
     values: {
       user_name: '',
       email_id: '',
       phone_number: null,
-    }
+    },
   };
 
   fetchUsers = async () => {
     const users = await getUsers();
-    this.setState({ users });
+    this.setState({ users, isLoading: false });
   };
 
   componentDidMount = () => {
@@ -32,26 +34,26 @@ class Users extends Component {
     await postUsers(values);
     await this.fetchUsers();
     this.handleAddUser();
-  }
+  };
 
-  handleChange = (e) => {
+  handleChange = e => {
     const id = e.target.id;
     const value = e.target.value;
     const { values } = this.state;
-    if(id == 'user_name') {
+    if (id === 'user_name') {
       values.user_name = value;
-    } else if(id == 'email_id') {
+    } else if (id === 'email_id') {
       values.email_id = value;
-    } else if(id == 'phone_number') {
+    } else if (id === 'phone_number') {
       values.phone_number = value;
     }
     this.setState({ values });
-  }
+  };
 
   render() {
-    const { users, isDisplayDialog, values } = this.state;
+    const { users, isDisplayDialog, isLoading, values } = this.state;
     return (
-      <main>
+      <main data-testid="users-page">
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <button
             onClick={this.handleAddUser}
@@ -77,65 +79,62 @@ class Users extends Component {
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                   <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            Name
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            Email
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            Mobile Number
-                          </th>
-                          <th scope="col" className="relative px-6 py-3">
-                            <span className="sr-only">Edit</span>
-                          </th>
-                        </tr>
-                      </thead>
+                      {!isLoading && (
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Name
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Email
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Mobile Number
+                            </th>
+                            <th scope="col" className="relative px-6 py-3">
+                              <span className="sr-only">Edit</span>
+                            </th>
+                          </tr>
+                        </thead>
+                      )}
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {users &&
+                        {!isLoading ? (
+                          users &&
                           users.length > 0 &&
-                          users.map((user) => {
+                          users.map(user => {
                             return (
                               <tr>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="flex items-center">
-                                    <div className="text-sm font-medium text-gray-900">
-                                      {user.user_name}
-                                    </div>
+                                    <div className="text-sm font-medium text-gray-900">{user.user_name}</div>
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {user.email}
-                                  </div>
+                                  <div className="text-sm text-gray-900">{user.email}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {user.phone_number}
-                                  </div>
+                                  <div className="text-sm text-gray-900">{user.phone_number}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                  <a
-                                    href="#"
-                                    className="text-indigo-600 hover:text-indigo-900"
-                                  >
+                                  <a href="#" className="text-indigo-600 hover:text-indigo-900">
                                     Edit
                                   </a>
                                 </td>
                               </tr>
                             );
-                          })}
+                          })
+                        ) : (
+                          <Spinner />
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -146,13 +145,12 @@ class Users extends Component {
         </div>
         {isDisplayDialog && (
           <Dialog
-            title='Add an user'
+            title="Add an user"
             isDialogOpen={isDisplayDialog}
             handleCloseDialog={this.handleAddUser}
             handleSubmit={this.handleSubmit}
           >
             <div className="bg-white rounded px-8 pt-6 pb-8 flex flex-col">
-              
               <div className="-mx-3 md:flex mb-6">
                 <div className="md:w-1/2 px-3 mb-6 md:mb-0">
                   <label
@@ -175,7 +173,7 @@ class Users extends Component {
                     className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
                     for="phone_number"
                   >
-                   phone Number
+                    phone Number
                   </label>
                   <input
                     className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
