@@ -45,7 +45,7 @@ jobs:
       - name: Backend unit tests checks
         run: pip install -r test-requirements.txt && pytest .
         env:
-          DB_HOST: postgres
+          db_host: postgres
 
       - name: Backend linting checks
         run: pip install flake8==3.9 && flake8 $GITHUB_WORKSPACE/split_expenses_api
