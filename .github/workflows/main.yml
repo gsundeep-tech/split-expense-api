@@ -43,7 +43,7 @@ jobs:
         run: export PATH="$GITHUB_WORKSPACE/split_expenses_api:$PATH"
 
       - name: Backend unit tests checks
-        run: pip install -r test-requirements.txt && pytest tests
+        run: pip install -r test-requirements.txt && pytest .
         env:
           DB_HOST: postgres
 
