@@ -22,6 +22,7 @@ def test_client(request):
     request.cls.resources_path = resources_path
     request.cls.urls = _urls
     os.environ['DB_SCHEMA'] = 'test_expense'
+    os.environ['DB_HOST'] = 'postgres'
 
     app = create_app()
     testing_client = app.test_client()
