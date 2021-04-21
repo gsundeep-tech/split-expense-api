@@ -51,9 +51,13 @@ jobs:
         run: pip install flake8==3.9 && flake8 $GITHUB_WORKSPACE/split_expenses_api
 
       - name: printing secrets
+        env:
+          SECRET_KEY: ${{ secrets.HEROKU_SECRET_KEY }}
+          APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
         run: |
-          echo ${{ secrets.HEROKU_SECRET_KEY }}
-          echo ${{ secrets.HEROKU_APP_NAME }}
+          echo '$SECRET_KEY'
+          echo '$APP_NAME'
+          echo "Hello World"
 
       - name: Add remote origin
         run: |
