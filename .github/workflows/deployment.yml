@@ -1,0 +1,64 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CD
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the development branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: postgres
+          POSTGRES_DB: devdb
+        ports:
+          - 5432:5432
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Actions
+      - name: Echo GITHUB_WORSPACE
+        run: echo $GITHUB_WORKSPACE
+
+      - name: Export PATH
+        run: export PATH="$GITHUB_WORKSPACE/split_expenses_api:$PATH"
+
+      - name: Backend unit tests checks
+        run: pip install -r test-requirements.txt && pytest .
+        env:
+          db_host: postgres
+
+      - name: Backend linting checks
+        run: pip install flake8==3.9 && flake8 $GITHUB_WORKSPACE/split_expenses_api
+      
+      - name: Deploy to Heroku
+        # You may pin to the exact commit or the version.
+        # uses: AkhileshNS/heroku-deploy@79ef2ae4ff9b897010907016b268fd0f88561820
+        uses: AkhileshNS/heroku-deploy@v3.12.12
+        with:
+          # This will be used for authentication. You can find it in your heroku homepage account settings
+          heroku_api_key: ${{ secrets.HEROKU_SECRET_KEY }}
+          # The appname to use for deploying/updating
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          # Email that you use with heroku
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          
