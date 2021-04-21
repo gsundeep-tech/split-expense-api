@@ -50,6 +50,14 @@ jobs:
       - name: Backend linting checks
         run: pip install flake8==3.9 && flake8 $GITHUB_WORKSPACE/split_expenses_api
       
+      - name: Add remote origin
+        run: |
+          git remote add heroku https://heroku:${{ secrets.HEROKU_SECRET_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
+          
+      - name: Deploy to Heroku
+        run: |
+          git push heroku HEAD:master -f
+
       - name: Deploy to Heroku
         # You may pin to the exact commit or the version.
         # uses: AkhileshNS/heroku-deploy@79ef2ae4ff9b897010907016b268fd0f88561820
