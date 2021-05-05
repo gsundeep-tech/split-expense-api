@@ -54,10 +54,7 @@ jobs:
         env:
           SECRET_KEY: ${{ secrets.HEROKU_SECRET_KEY }}
           APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
-        run: |
-          echo `$SECRET_KEY`
-          echo `$APP_NAME`
-          echo "Hello World"
+        run: echo $APP_NAME
 
       - name: Add remote origin
         run: |
