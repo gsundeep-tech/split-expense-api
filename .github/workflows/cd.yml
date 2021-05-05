@@ -52,17 +52,15 @@ jobs:
 
       - name: printing secrets
         env:
-          SECRET_KEY: ${{ secrets.HEROKU_SECRET_KEY }}
-          APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
-        run: echo $APP_NAME
+          MY_SECRET_KEY: ${{ secrets.HEROKU_SECRET_KEY }}
+          MY_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+        run: echo $MY_APP_NAME
 
       - name: Add remote origin
-        run: |
-          git remote add heroku https://heroku:${{ secrets.HEROKU_SECRET_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
+        run: git remote add heroku https://heroku:${{ secrets.HEROKU_SECRET_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
 
       - name: Deploy to Heroku1
-        run: |
-          git push heroku HEAD:master -f
+        run: git push heroku HEAD:master -f
 
       - name: Deploy to Heroku
         # You may pin to the exact commit or the version.
