@@ -45,6 +45,16 @@ class LazadaParser(ParserInterface):
         # Extract the line item values
         line_item_values = self.__get_redmart_line_items_values()
 
+        validation_status = ""
+        # If we are not able to retrieve the header values
+        if len(header_items_values.keys()) == 0:
+            header_items_values = {
+                "total": 0,
+                "net_amount": 0,
+                "discount": 0
+            }
+            return header_items_values, line_item_values, validation_status
+
         # validating the retrieved headers and line items
         validation_status = self.validate(header_items_values,
                                           line_item_values)
