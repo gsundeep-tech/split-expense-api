@@ -44,6 +44,8 @@ jobs:
           # Email that you use with heroku
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
         env:
+          # use HD prefix the env to differentitate from github action env to heroku deployment env
+          # eg: HD_DB_NAME -> will be DB_NAME in heroku app
           HD_DB_NAME: ${{ secrets.HEROKU_DB_NAME }}
           HD_DB_HOST: ${{ secrets.HEROKU_DB_HOST }}
           HD_DB_USER: ${{ secrets.HEROKU_DB_USER }}
