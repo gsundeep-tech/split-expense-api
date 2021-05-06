@@ -28,6 +28,9 @@ jobs:
       # Actions
       - name: Echo GITHUB_WORSPACE
         run: echo $GITHUB_WORKSPACE
+        
+      - name: execute git command
+        run: git filter-branch -- --all
 
       - name: Deploy to Heroku
         # You may pin to the exact commit or the version.
