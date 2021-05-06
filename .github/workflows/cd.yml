@@ -28,7 +28,7 @@ jobs:
       # Actions
       - name: Echo GITHUB_WORSPACE
         run: echo $GITHUB_WORKSPACE
-        
+
       - name: execute git command
         run: git filter-branch -- --all
 
