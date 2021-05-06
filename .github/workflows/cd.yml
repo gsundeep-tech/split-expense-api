@@ -43,6 +43,10 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           # Email that you use with heroku
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          # stack or container
-          stack: 'heroku-18'
+        env:
+          DB_NAME: ${{ secrets.HEROKU_DB_NAME }}
+          DB_HOST: ${{ secrets.HEROKU_DB_HOST }}
+          DB_USER: ${{ secrets.HEROKU_DB_USER }}
+          DB_PASSWORD: ${{ secrets.HEROKU_DB_PASSWORD }}
+        
           
