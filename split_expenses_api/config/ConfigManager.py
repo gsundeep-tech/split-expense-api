@@ -3,7 +3,6 @@ import os
 
 class ConfigManager:
     def __init__(self):
-        print(os.environ)
         self.runtime = os.environ.get('RUNTIME_ENV', 'local')
 
     def __get_db_uri(self):
