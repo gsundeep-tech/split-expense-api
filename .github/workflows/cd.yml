@@ -67,4 +67,6 @@ jobs:
           # Login
           justlogin: true
           # branch details
-          branch: main 
+          branch: "main" 
+          # remote branch information
+          remote_branch: "main"
