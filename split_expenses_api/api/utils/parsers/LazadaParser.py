@@ -17,8 +17,8 @@ class LazadaParser(ParserInterface):
     def __init__(self, file_path, file_type):
 
         self.tables = tabula.read_pdf(file_path,
-                                     pages='all',
-                                     multiple_tables=True)
+                                      pages='all',
+                                      multiple_tables=True)
 
         """
         Only total, delivery fee, discount and net amount paid are displayed.
