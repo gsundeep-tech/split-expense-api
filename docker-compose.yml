@@ -5,7 +5,7 @@ services:
       - docker_env
     build:
       context: ./
-      dockerfile: DockerfileAPI
+      dockerfile: Dockerfile
     depends_on:
       - db
     ports:

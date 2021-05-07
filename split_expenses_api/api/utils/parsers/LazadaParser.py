@@ -16,14 +16,9 @@ class LazadaParser(ParserInterface):
 
     def __init__(self, file_path, file_type):
 
-        if file_type == 'pdf':
-            self.tables = tabula.read_pdf(file_path,
-                                          pages='all',
-                                          multiple_tables=True)
-            if len(self.tables) == 0:
-                return {"error": "tables are not extracted"}
-        else:
-            raise Exception("Lazada Parser only Supports PDF files")
+        self.tables = tabula.read_pdf(file_path,
+                                     pages='all',
+                                     multiple_tables=True)
 
         """
         Only total, delivery fee, discount and net amount paid are displayed.
