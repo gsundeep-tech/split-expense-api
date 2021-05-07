@@ -26,6 +26,4 @@ RUN apk --no-cache --update-cache add gcc gfortran build-base wget freetype-dev 
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 5000
-
-CMD ["python", "server.py"]
+CMD gunicorn --bind 0.0.0.0:$PORT server:app
