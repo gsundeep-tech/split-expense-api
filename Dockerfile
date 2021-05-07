@@ -6,9 +6,10 @@ RUN apk update \
 
 WORKDIR /home/expense
 
-COPY split_expenses_api ./split_expenses_api
+COPY . ./split-expenses-api
+COPY requirements.txt server.py ./
 
-WORKDIR /home/expense/split_expenses_api
+WORKDIR /home/expense/split-expenses-api
 
 ENV PYTHONPATH "${PYTHONPATH}:/home/expense/"
 ENV JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
@@ -25,6 +26,4 @@ RUN apk --no-cache --update-cache add gcc gfortran build-base wget freetype-dev 
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 5000
-
-CMD ["python", "server.py"]
+CMD gunicorn --bind 0.0.0.0:$PORT server:app
