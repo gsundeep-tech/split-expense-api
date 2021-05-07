@@ -1,12 +1,14 @@
 from flask import Flask, Blueprint
 from flask_restplus import Api
 from flask_cors import CORS
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 
 def create_app():
 
     app = Flask(__name__)
     CORS(app)
+    app.wsgi_app = ProxyFix(app.wsgi_app)
 
     app.config['DEBUG'] = True
 
