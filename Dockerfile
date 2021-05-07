@@ -6,10 +6,10 @@ RUN apk update \
 
 WORKDIR /home/expense
 
-COPY split_expenses_api ./split_expenses_api
+COPY . ./split-expenses-api
 COPY requirements.txt server.py ./
 
-WORKDIR /home/expense/split_expenses_api
+WORKDIR /home/expense/split-expenses-api
 
 ENV PYTHONPATH "${PYTHONPATH}:/home/expense/"
 ENV JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
