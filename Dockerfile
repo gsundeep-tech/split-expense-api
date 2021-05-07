@@ -7,6 +7,7 @@ RUN apk update \
 WORKDIR /home/expense
 
 COPY split_expenses_api ./split_expenses_api
+COPY requirements.txt server.py ./
 
 WORKDIR /home/expense/split_expenses_api
 
