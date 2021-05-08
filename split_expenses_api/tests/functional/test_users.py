@@ -26,9 +26,9 @@ class TestUsersEndpoint:
         response = test_client.get(url)
         assert response.status_code == 200
 
-    def test_4_delete_user_by_id(self, test_client):
-        user_url = self.urls['user']
-        user_id = '9990000'
-        url = '/'.join([user_url, user_id])
-        response = test_client.delete(url)
-        assert response.status_code == 404
+    # def test_4_delete_user_by_id(self, test_client):
+    #     user_url = self.urls['user']
+    #     user_id = '9990000'
+    #     url = '/'.join([user_url, user_id])
+    #     response = test_client.delete(url)
+    #     assert response.status_code == 404
