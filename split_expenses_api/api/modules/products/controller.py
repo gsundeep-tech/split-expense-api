@@ -36,6 +36,7 @@ class ProductsController(Resource):
 
     @namespace.expect(product_parser, validate=False)
     def post(self):
+        return "service disabled temporarily", 201
         args = product_parser.parse_args()
         with db_engine.begin() as conn:
             products_model = ProductsModel(conn)
@@ -57,6 +58,7 @@ class ProductController(Resource):
             return result, 200
 
     def delete(self, product_id):
+        return "service disabled temporarily", 200
         with db_engine.begin() as conn:
             products_model = ProductsModel(conn)
             result = products_model.delete_product(product_id)

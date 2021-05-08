@@ -24,6 +24,7 @@ class UsersListController(Resource):
 
     @namespace.expect(user_parser, validate=False)
     def post(self):
+        return "service disabled temporarily", 201
         args = user_parser.parse_args()
         username = args.get("user_name")
         phone_number = args.get("phone_number")
@@ -43,6 +44,7 @@ class UserController(Resource):
             return response, 200
 
     def delete(self, user_id):
+        return "service disabled temporarily", 200
         with db_engine.begin() as conn:
             user_model = UserModel(conn)
             row_count = user_model.delete_user(user_id)
