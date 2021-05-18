@@ -24,14 +24,15 @@ class UsersListController(Resource):
 
     @namespace.expect(user_parser, validate=False)
     def post(self):
-        args = user_parser.parse_args()
-        username = args.get("user_name")
-        phone_number = args.get("phone_number")
-        email = args.get("email")
-        with db_engine.begin() as conn:
-            user_model = UserModel(conn)
-            user_model.insert_user(username, phone_number, email)
-            return "User {} Saved successfully".format(username), 201
+        return "service disabled temporarily", 201
+        # args = user_parser.parse_args()
+        # username = args.get("user_name")
+        # phone_number = args.get("phone_number")
+        # email = args.get("email")
+        # with db_engine.begin() as conn:
+        #     user_model = UserModel(conn)
+        #     user_model.insert_user(username, phone_number, email)
+        #     return "User {} Saved successfully".format(username), 201
 
 
 @namespace.route("/<string:user_id>")
@@ -43,9 +44,10 @@ class UserController(Resource):
             return response, 200
 
     def delete(self, user_id):
-        with db_engine.begin() as conn:
-            user_model = UserModel(conn)
-            row_count = user_model.delete_user(user_id)
-            if row_count > 0:
-                return "deleted user with id {}".format(user_id), 200
-            return "User not found", 404
+        return "service disabled temporarily", 200
+        # with db_engine.begin() as conn:
+        #     user_model = UserModel(conn)
+        #     row_count = user_model.delete_user(user_id)
+        #     if row_count > 0:
+        #         return "deleted user with id {}".format(user_id), 200
+        #     return "User not found", 404
